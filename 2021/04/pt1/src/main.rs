@@ -7,22 +7,17 @@ struct Board {
     // a spot was marked or not.
     numbers: [u8; 25],
 
-    // We store 5 3-bit numbers in a single 16-bit number to reduce total size.
-    // The structure ends up being 0b0aaabbbcccdddeee.
-    left_rows: u16,
-    left_columns: u16,
+    left_rows: [u8; 5],
+    left_columns: [u8; 5],
 }
-
-/// Initial value for left_rows and left_columns, storing 5 3-bit values of 5
-const INIT_LEFT_VALUE: u16 = 0b0101101101101101;
 
 impl Board {
     /// Initialize a new Board from a list of numbers
     fn new(numbers: [u8; 25]) -> Self {
         Self {
             numbers,
-            left_rows: INIT_LEFT_VALUE,
-            left_columns: INIT_LEFT_VALUE,
+            left_rows: [5u8; 5],
+            left_columns: [5u8; 5],
         }
     }
 
@@ -41,13 +36,11 @@ impl Board {
                 let c = i % 5;
 
                 // Update our unmarked per-column and per-row counts
-                self.left_rows -= 1 << (r * 3);
-                self.left_columns -= 1 << (c * 3);
+                self.left_rows[r] -= 1;
+                self.left_columns[r] -= 1;
 
                 // If we finished a column or row, compute the challenge answer
-                if self.left_rows & 0b111 << (r * 3) == 0 ||
-                    self.left_columns & 0b111 << (c * 3) == 0
-                {
+                if self.left_rows[r] == 0 || self.left_columns[c] == 0 {
                     let mut unmarked_sum = 0;
 
                     // Compute the sum of unmarked numbers
