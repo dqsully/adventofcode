@@ -22,8 +22,11 @@ fn main() {
         fuel
     };
 
-    let lower = calculate_fuel(mean.floor() as i32);
-    let upper = calculate_fuel(mean.ceil() as i32);
+    let lower_int_bound = (mean - 0.5).floor() as i32;
 
-    println!("Total fuel: {}", lower.min(upper));
+    let lower_guess = calculate_fuel(lower_int_bound);
+    let middle_guess = calculate_fuel(lower_int_bound + 1);
+    let upper_guess = calculate_fuel(lower_int_bound + 2);
+
+    println!("Total fuel: {}", lower_guess.min(middle_guess).min(upper_guess));
 }
