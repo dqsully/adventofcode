@@ -9,7 +9,7 @@ fn main() {
         .map(|s| s.trim().parse::<i32>().expect("invalid int"))
         .collect();
 
-    let mean = (nums.iter().sum::<i32>() as f64) / (nums.len() as f64) - 0.5;
+    let mean = (nums.iter().sum::<i32>() as f64) / (nums.len() as f64);
 
     let calculate_fuel = |mean: i32| {
         let mut fuel = 0;
