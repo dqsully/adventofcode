@@ -40,12 +40,13 @@ use std::fs::read_to_string;
 // g = !(d4 | d3)
 // (d0 or d9) & g -> d0, d9
 
-fn solve_line(digits: [u8; 10], output_reading: [u8; 4]) -> u64 {
+fn solve_line(digits: &[u8; 10], output_reading: &[u8; 4]) -> u64 {
+    // Use arrays (and an explicit index) to avoid heap allocations
     let mut known_digits = [0u8; 10];
     let mut unknown_digits = [0u8; 6];
     let mut unknown_digits_len=0;
 
-    for &digit in &digits {
+    for &digit in digits {
         match digit.count_ones() {
             2 => known_digits[1] = digit,
             4 => known_digits[4] = digit,
@@ -103,7 +104,7 @@ fn solve_line(digits: [u8; 10], output_reading: [u8; 4]) -> u64 {
 
     let mut output = 0;
 
-    'output_digit_loop: for digit in output_reading.into_iter() {
+    'output_digit_loop: for &digit in output_reading.iter() {
         for (j, &known_digit) in known_digits.iter().enumerate() {
             if digit == known_digit {
                 output = output * 10 + j as u64;
@@ -148,7 +149,7 @@ fn main() {
             output_reading[i] = parse_digit_str(digit_str);
         }
 
-        sum += solve_line(digits, output_reading);
+        sum += solve_line(&digits, &output_reading);
     }
 
     println!("Sum of readings: {}", sum);
