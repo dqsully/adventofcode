@@ -1,20 +1,10 @@
 use std::env::args;
 use std::fs::read_to_string;
 
-// const DIG_0: u8 = 0b01011111;
-// const DIG_1: u8 = 0b00000011;
-// const DIG_2: u8 = 0b01101101;
-// const DIG_3: u8 = 0b00101111;
-// const DIG_4: u8 = 0b00110011;
-// const DIG_5: u8 = 0b00111110;
-// const DIG_6: u8 = 0b01111110;
-// const DIG_7: u8 = 0b00001011;
-// const DIG_8: u8 = 0b01111111;
-// const DIG_9: u8 = 0b00111111;
-
 // Unique based on number of bits per segment:
 //
 // #bits  bits             digit
+//        g f e d c b a
 //
 // 2      0 0 0 0 0 1 1    d1
 // 4      0 1 1 0 0 1 1    d4
