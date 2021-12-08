@@ -62,8 +62,6 @@ fn solve_line(digits: &[u8; 10], output_reading: &[u8; 4]) -> u64 {
     let mut d2_or_d5 = [0u8; 2];
     let mut d0_or_d9 = [0u8; 2];
 
-    assert!(unknown_digits.len() == 6);
-
     for digit in unknown_digits {
         if digit.count_ones() == 6 {
             if (digit & known_digits[1]).count_ones() == 1 {
