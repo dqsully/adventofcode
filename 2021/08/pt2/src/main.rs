@@ -1,34 +1,44 @@
 use std::env::args;
 use std::fs::read_to_string;
 
+// 7-segment display
+//
+//  aaaa
+// b    c
+// b    c
+//  dddd
+// e    f
+// e    f
+//  gggg
+
 // Unique based on number of bits per segment:
 //
 // #bits  bits             digit
 //        g f e d c b a
 //
-// 2      0 0 0 0 0 1 1    d1
-// 4      0 1 1 0 0 1 1    d4
-// 3      0 0 0 1 0 1 1    d7
+// 2      0 1 0 0 1 0 0    d1
+// 4      0 1 0 1 1 1 0    d4
+// 3      0 1 0 0 1 0 1    d7
 // 7      1 1 1 1 1 1 1    d8
 
 // Remaining digits:
 //
 // #bits  bits             digit
 //
-// 6      1 0 1 1 1 1 1    d0
-// 6      1 1 1 1 1 1 0    d6
-// 6      0 1 1 1 1 1 1    d9
-// 5      1 1 0 1 1 0 1    d2
-// 5      0 1 1 1 1 1 0    d5
-// 5      0 1 0 1 1 1 1    d3
+// 6      1 1 1 0 1 1 1    d0
+// 6      1 1 1 1 0 1 1    d6
+// 6      1 1 0 1 1 1 1    d9
+// 5      1 0 1 1 1 0 1    d2
+// 5      1 1 0 1 0 1 1    d5
+// 5      1 1 0 1 1 0 1    d3
 
 // d1 & 6-count digits -> d6, (d0 or d9)
 // d1 & 5-count digits -> d3, (d5 or d2)
 
-// a = !d6
-// (d5 or d2) & a -> d5, d2
-// g = !(d4 | d3)
-// (d0 or d9) & g -> d0, d9
+// c = !d6
+// (d5 or d2) & c -> d5, d2
+// e = !(d4 | d3)
+// (d0 or d9) & e -> d0, d9
 
 fn solve_line(digits: &[u8; 10], output_reading: &[u8; 4]) -> u64 {
     // Use arrays (and an explicit index) to avoid heap allocations
@@ -70,9 +80,9 @@ fn solve_line(digits: &[u8; 10], output_reading: &[u8; 4]) -> u64 {
         }
     }
 
-    let a = !known_digits[6];
+    let c = !known_digits[6];
 
-    if d2_or_d5[0] & a != 0 {
+    if d2_or_d5[0] & c != 0 {
         known_digits[2] = d2_or_d5[0];
         known_digits[5] = d2_or_d5[1];
     } else {
@@ -80,9 +90,9 @@ fn solve_line(digits: &[u8; 10], output_reading: &[u8; 4]) -> u64 {
         known_digits[2] = d2_or_d5[1];
     }
 
-    let g = !(known_digits[4] | known_digits[3]);
+    let e = !(known_digits[4] | known_digits[3]);
 
-    if d0_or_d9[0] & g != 0 {
+    if d0_or_d9[0] & e != 0 {
         known_digits[0] = d0_or_d9[0];
         known_digits[9] = d0_or_d9[1];
     } else {
